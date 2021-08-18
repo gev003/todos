@@ -1,0 +1,14 @@
+li {
+  display: inline-block;
+  appearance: none;
+  padding: 3px 0;
+}
+button[name="checks"] {
+  border-radius: 3px;
+  background: #fff;
+  border: none;
+  margin-left: 5px;
+}
+.done {
+  text-decoration: line-through;
+}

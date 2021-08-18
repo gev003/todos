@@ -1,0 +1,21 @@
+input {
+  padding: 10px 30px;
+  border: none;
+  border-radius: 5px;
+  margin-right: 5px;
+}
+button[type="submit"] {
+  outline: none;
+  border: none;
+  padding: 10px 20px;
+  cursor: pointer;
+  border-radius: 5px;
+  background-color: #fff;
+  color: #828fee;
+  transition: 0.3s ease-in-out;
+  border: 1px solid #fff;
+}
+button[type="submit"]:hover {
+  background: transparent;
+  color: #fff;
+}
