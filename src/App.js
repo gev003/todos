@@ -32,18 +32,23 @@ export default class App extends Component {
   }
 
   componentDidMount() {
-    const url = "https://jsonplaceholder.typicode.com/todos?_limit=5";
-    fetch(url)
-      .then((stream) => stream.json())
-      .then((response) => {
-        karlos.forEach((item) => {
-          item.id =
-            Date.now().toString(36) + Math.random().toString(36).substr(2);
+    let initial = localStorage.getItem("initialTodos");
+    if (!initial) {
+      const url = "https://jsonplaceholder.typicode.com/todos?_limit=5";
+      fetch(url)
+        .then((stream) => stream.json())
+        .then((response) => {
+          karlos.forEach((item) => {
+            item.id =
+              Date.now().toString(36) + Math.random().toString(36).substr(2);
+          });
+          this.setState({
+            initialDotos: [...response, ...karlos],
+          });
         });
-        this.setState({
-          initialDotos: [...response, ...karlos],
-        });
-      });
+    } else {
+      this.setState({ initialDotos: [...JSON.parse(initial)] });
+    }
   }
 
   renderState = (val) => {
@@ -113,17 +118,31 @@ export default class App extends Component {
     if (result.length) {
       this.setState({ filteredResult: result, emptySearchResult: null });
     } else {
-      this.setState({ filteredResult: [], emptySearchResult: true });
+      this.setState({ filteredResult: null, emptySearchResult: true });
     }
   };
 
-  // componentDidUpdate(prevProps, prevstate) {
-  //   setTimeout(() => {
-  //     if (this.inputRef.current.value === "") {
-  //       this.setState({ initialDotos: [...prevstate] });
-  //     }
-  //   }, 1000);
-  // }
+  setNewValues = (inputVal, id) => {
+    const sameItem = this.state.initialDotos.find((obj) => {
+      return obj.id === id;
+    });
+    sameItem.title = inputVal;
+    this.setState({ initialDotos: [...this.state.initialDotos] }, () =>
+      localStorage.setItem(
+        "initialTodos",
+        JSON.stringify(this.state.initialDotos)
+      )
+    );
+  };
+
+  componentDidUpdate(prevProps, prevstate) {
+    if (prevstate.initialDotos.length !== this.state.initialDotos.length) {
+      localStorage.setItem(
+        "initialTodos",
+        JSON.stringify(this.state.initialDotos)
+      );
+    }
+  }
 
   render() {
     return (
@@ -151,6 +170,7 @@ export default class App extends Component {
             todos={this.state.filteredResult || this.state.initialDotos}
             deleteBtn={this.deleteBtn}
             isChecked={this.isChecked}
+            setUpdatedValue={this.setNewValues}
           />
         )}
         {this.state.emptySearchResult && <div>No Search Result</div>}

@@ -9,6 +9,7 @@ export default class TodoList extends Component {
           todoList={this.props.todos}
           deleteBtn={this.props.deleteBtn}
           isChecked={this.props.isChecked}
+          setUpdatedValue={this.props.setUpdatedValue}
         />
       </div>
     );

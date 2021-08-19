@@ -2,13 +2,25 @@ li {
   display: inline-block;
   appearance: none;
   padding: 3px 0;
+  position: relative;
 }
 button[name="checks"] {
   border-radius: 3px;
   background: #fff;
   border: none;
   margin-left: 5px;
+  cursor: pointer;
 }
 .done {
   text-decoration: line-through;
+}
+.modal {
+  border: 2px solid #fff;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #495291;
+  padding: 30px 70px;
+  border-radius: 10px;
 }
