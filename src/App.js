@@ -63,10 +63,23 @@ export default class App extends Component {
           completed: false,
         },
       ],
+      filteredResult: null,
     });
   };
 
   deleteBtn = (id) => {
+    if (this.state.filteredResult) {
+      const filt = [...this.state.filteredResult];
+      let filtTodos = [...filt.filter((todo) => todo.id !== id)];
+      this.setState({
+        filteredResult: filtTodos,
+      });
+    }
+
+    // if (this.state.filteredResult.length < 1) {
+    //   this.setState({ emptySearchResult: true });
+    // }
+
     const prevState = [...this.state.initialDotos];
     let filteredTodos = [...prevState.filter((todo) => todo.id !== id)];
     this.setState({
@@ -83,6 +96,14 @@ export default class App extends Component {
   };
 
   clearCompleted = () => {
+    if (this.state.filteredResult) {
+      const filt = [...this.state.filteredResult];
+      let filtTodos = [...filt.filter((todo) => !todo.completed)];
+      this.setState({
+        filteredResult: filtTodos,
+      });
+    }
+
     const previousState = [...this.state.initialDotos];
     let filteredArray = [...previousState.filter((todo) => !todo.completed)];
     this.setState({
@@ -99,24 +120,19 @@ export default class App extends Component {
             Date.now().toString(36) + Math.random().toString(36).substr(2);
         });
         this.setState({
+          filteredResult: null,
           initialDotos: [...this.state.initialDotos, ...response],
         });
       });
   };
 
-  checkString = (arr, searchText) => {
-    let result = arr.filter((obj) => {
-      const values = Object.values(obj);
-      for (let i = 0; i < values.length; i++) {
-        if (("" + values[i]).search(searchText) !== -1) {
-          return true;
-        }
-      }
-      return false;
-    });
+  checkString = (searchText) => {
+    let result = this.state.initialDotos.filter((current) =>
+      current.title.includes(searchText)
+    );
 
     if (result.length) {
-      this.setState({ filteredResult: result, emptySearchResult: null });
+      this.setState({ filteredResult: result, emptySearchResult: false });
     } else {
       this.setState({ filteredResult: null, emptySearchResult: true });
     }
@@ -151,13 +167,10 @@ export default class App extends Component {
           <input
             onChange={(e) => {
               e.preventDefault();
-              this.checkString(
-                this.state.initialDotos,
-                this.inputRef.current.value
-              );
+              this.checkString(this.inputRef.current.value);
             }}
             type="text"
-            placeholder="Enter some text"
+            placeholder="Enter text to Search"
             ref={this.inputRef}
           ></input>
         </form>
@@ -166,12 +179,16 @@ export default class App extends Component {
         {!this.state.initialDotos.length ? (
           <div>No Todos To Show</div>
         ) : (
-          <TodoList
-            todos={this.state.filteredResult || this.state.initialDotos}
-            deleteBtn={this.deleteBtn}
-            isChecked={this.isChecked}
-            setUpdatedValue={this.setNewValues}
-          />
+          <>
+            {!this.state.emptySearchResult && (
+              <TodoList
+                todos={this.state.filteredResult || this.state.initialDotos}
+                deleteBtn={this.deleteBtn}
+                isChecked={this.isChecked}
+                setUpdatedValue={this.setNewValues}
+              />
+            )}
+          </>
         )}
         {this.state.emptySearchResult && <div>No Search Result</div>}
         <TodoBottom

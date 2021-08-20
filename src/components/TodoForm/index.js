@@ -32,7 +32,7 @@ export default class TodoForm extends Component {
           type="text"
           value={this.state.value}
           ref={this.inputRef}
-          placeholder="Enter Some Text"
+          placeholder="Add New ToDo"
           onChange={(evt) => {
             this.setState({ value: evt.target.value });
           }}

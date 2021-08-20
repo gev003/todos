@@ -13,7 +13,9 @@ export default class TodoHeader extends Component {
         className="form"
         onSubmit={(evt) => {
           evt.preventDefault();
-          this.props.sub(this.inputRef.current.value);
+          if (this.inputRef.current.value.length) {
+            this.props.sub(this.inputRef.current.value);
+          }
         }}
       >
         <input

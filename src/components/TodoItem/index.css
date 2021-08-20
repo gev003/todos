@@ -23,4 +23,5 @@ button[name="checks"] {
   background-color: #495291;
   padding: 30px 70px;
   border-radius: 10px;
+  z-index: auto;
 }

@@ -27,46 +27,49 @@ export default class Modal extends Component {
   };
 
   setValue = () => {
-    this.props.setUpdateVal(this.inputRef.current.value);
-    this.props.changeState();
-    this.setState({ toggleBtn: false });
+    if (this.inputRef.current.value.trim().length > 0) {
+      this.props.setUpdateVal(this.inputRef.current.value);
+      this.props.changeState();
+      this.setState({ toggleBtn: false });
+    }
   };
 
   render() {
-    // console.log(this.inputRef);
     return (
       <React.Fragment>
         {this.props.finalState.modalIsOpen && (
-          <div className="modal">
-            <input
-              disabled
-              type="text"
-              ref={this.inputRef}
-              defaultValue={this.props.finalState.todotitle}
-            ></input>
-            <button
-              className="btn"
-              name="checks"
-              onClick={() => {
-                this.props.changeState();
-                this.setState({ toggleBtn: false });
-              }}
-            >
-              X
-            </button>
-            <button ref={this.buttonRef} name="checks" onClick={this.toggle}>
-              &#9998;
-            </button>
-            {this.state.toggleBtn && (
-              <>
-                <button name="checks" onClick={this.setValue}>
-                  &#10003;
-                </button>{" "}
-                <button name="checks" onClick={this.show}>
-                  &#10006;
-                </button>
-              </>
-            )}
+          <div className={this.props.finalState.disabledDiv && "disabledDiv"}>
+            <div className="modal">
+              <input
+                disabled
+                type="text"
+                ref={this.inputRef}
+                defaultValue={this.props.finalState.todotitle}
+              ></input>
+              <button
+                className="btn"
+                name="checks"
+                onClick={() => {
+                  this.props.changeState();
+                  this.setState({ toggleBtn: false });
+                }}
+              >
+                X
+              </button>
+              <button ref={this.buttonRef} name="checks" onClick={this.toggle}>
+                &#9998;
+              </button>
+              {this.state.toggleBtn && (
+                <>
+                  <button name="checks" onClick={this.setValue}>
+                    &#10003;
+                  </button>{" "}
+                  <button name="checks" onClick={this.show}>
+                    &#10006;
+                  </button>
+                </>
+              )}
+            </div>
           </div>
         )}
       </React.Fragment>

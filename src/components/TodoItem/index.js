@@ -10,6 +10,7 @@ export default class TodoItem extends Component {
       modalIsOpen: false,
       todoTitle: null,
       disableContent: false,
+      disabledDiv: false,
     };
 
     this.inputRef = React.createRef();
@@ -22,36 +23,42 @@ export default class TodoItem extends Component {
 
   render() {
     return (
-      <ul>
-        {this.props.todoList.map((todo, index) => (
-          <React.Fragment key={todo.id}>
-            <input
-              type="checkbox"
-              checked={todo.completed}
-              onChange={() => this.props.isChecked(todo.id)}
-            ></input>
-            <li ref={this.inputRef} className={todo.completed ? "done" : ""}>
-              {todo.title}
-            </li>
-            <button name="checks" onClick={() => this.props.deleteBtn(todo.id)}>
-              &times;
-            </button>
-            <button
-              name="checks"
-              onClick={() => {
-                this.setState({
-                  modalIsOpen: true,
-                  todotitle: todo.title,
-                  disableContent: true,
-                });
-                this.editableItemID = todo.id;
-              }}
-            >
-              &#9998;
-            </button>
-            <br />
-          </React.Fragment>
-        ))}
+      <>
+        <ul>
+          {this.props.todoList.map((todo, index) => (
+            <React.Fragment key={todo.id}>
+              <input
+                type="checkbox"
+                checked={todo.completed}
+                onChange={() => this.props.isChecked(todo.id)}
+              ></input>
+              <li ref={this.inputRef} className={todo.completed ? "done" : ""}>
+                {todo.title}
+              </li>
+              <button
+                name="checks"
+                onClick={() => this.props.deleteBtn(todo.id)}
+              >
+                &times;
+              </button>
+              <button
+                name="checks"
+                onClick={() => {
+                  this.setState({
+                    modalIsOpen: true,
+                    todotitle: todo.title,
+                    disableContent: true,
+                    disabledDiv: true,
+                  });
+                  this.editableItemID = todo.id;
+                }}
+              >
+                &#9998;
+              </button>
+              <br />
+            </React.Fragment>
+          ))}
+        </ul>
         <Modal
           finalState={this.state}
           changeState={() => {
@@ -59,7 +66,7 @@ export default class TodoItem extends Component {
           }}
           setUpdateVal={this.setUpdateVal}
         />
-      </ul>
+      </>
     );
   }
 }
